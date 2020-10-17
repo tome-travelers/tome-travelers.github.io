@@ -1,0 +1,325 @@
+<html>
+
+<head>
+    <title>Battle - Tome Travelers</title>
+    <meta charset="utf-8">
+
+    <link rel="shortcut icon" type="image/png" href="favicon.png" sizes="any">
+    <link rel="stylesheet" href="css/tome_travelers.css">
+    <script src="js/game.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <p>Tome Travelers - Battle</p>
+        <br/>
+        <div id="attack_menu">
+            <div>The percentage indicates the probability that the given attack is available in the battle.
+                Click on an attack to equip/remove it. The <i>Basic Attack</i> is used to fill up the
+                total probability to 100% and can't be removed by clicking. Your attacks can't exceed the total
+                100% probability. In the battle if there are multiple enemies click on the one you want to
+                target with your attack. Then click the button with the name of the attack you want to
+                perform. Hovering over a button shows the description of the attack.</div>
+            <br/>
+            <div id="available_attacks"></div>
+        </div>
+        <div>
+            <br />
+            <button onclick="javascript:startBattle()">Start battle</button>
+        </div>
+        <div id="battle_menu">
+            <br />
+            <button onclick="javascript:stopBattle()">Stop battle</button>
+            <br /><br /><br />
+            <div id="hero_health">100</div>
+            <div id="action_slots">
+                <button id="action_slot_1" value="" onclick="javascript:executeAttack(this)">Attack A</button>
+                <button id="action_slot_2" value="" onclick="javascript:executeAttack(this)">Attack B</button>
+                <button id="action_slot_3" value="" onclick="javascript:executeAttack(this)">Attack C</button>
+                <button id="action_slot_4" onclick="javascript:useHealthPotion(this)">Use Health Potion</button>
+            </div>
+            <div id="battle_message"></div>
+            <br /><br />
+            <div id="enemy_group"></div>
+            <br /><br />
+            <textarea id="battle_log" cols="90" rows="7"></textarea>
+        </div>
+    </div>
+    <footer>
+        <div>Copyright &copy; 2020 Tome Travelers. All Rights Reserved.
+        Inquiries to: <a href="mailto:tome.travelers@pm.me">tome.travelers@pm.me</a></div>
+    </footer>
+</body>
+
+<script>
+    //TT.Random.seed(1519055172);
+    console.log("Seed:", TT.Random.getSeed());
+    let attackLookUp = {
+        "BASIC_ATTACK": { id: "BASIC_ATTACK", name: "Basic Attack", minDamage: 4, maxDamage: 6, type: "melee", range: "single", probability: null },
+        "GROUND_BREAKER": { id: "GROUND_BREAKER", name: "Groundbreaker", minDamage: 2, maxDamage: 4, type: "melee", range: "multi", probability: 50 },
+        "FLAME_STRIKE": { id: "FLAME_STRIKE", name: "Flame Strike", minDamage: 7, maxDamage: 11, type: "fire", range: "single", probability: 10 },
+        "MIGHTY_CHOP": { id: "MIGHTY_CHOP", name: "Mighty Chop", minDamage: 6, maxDamage: 12, type: "melee", range: "single", probability: 50 },
+        "DEADLY_BLOW": { id: "DEADLY_BLOW", name: "Deadly Blow", minDamage: 8, maxDamage: 18, type: "melee", range: "single", probability: 25 },
+        "INFERNO": { id: "INFERNO", name: "Inferno", minDamage: 8, maxDamage: 12, type: "fire", range: "single", probability: 25 },
+        "EARTHQUAKE": { id: "EARTHQUAKE", name: "Earthquake", minDamage: 6, maxDamage: 17, type: "melee", range: "multi", probability: 10 }
+    };
+    let enemyLookup = {
+        "GOBLIN": { id: "GOBLIN", name: "Goblin", health: 40, maxHealth: 40, minAttack: 1, maxAttack: 4, element: null },
+        "GOBLIN_LEADER": { id: "GOBLIN_LEADER", name: "Goblin Leader", health: 50, maxHealth: 50, minAttack: 2, maxAttack: 4, element: null },
+        "FIRE_GOLEM": { id: "FIRE_GOLEM", name: "Fire Golem", health: 130, maxHealth: 130, minAttack: 4, maxAttack: 7, element: "fire" },
+        "ICE_WARITH": { id: "ICE_WARITH", name: "Ice Wraith", health: 75, maxHealth: 75, minAttack: 7, maxAttack: 9, element: "ice" },
+        "SKELETON": { id: "SKELETON", name: "Skeleton", health: 30, maxHealth: 30, minAttack: 2, maxAttack: 5, element: null },
+        "GHOUL": { id: "GHOUL", name: "Ghoul", health: 60, maxHealth: 60, minAttack: 3, maxAttack: 6, element: null },
+        "CYCLOPS": { id: "CYCLOPS", name: "Cyclops", health: 95, maxHealth: 95, minAttack: 1, maxAttack: 10, element: null },
+        "BLOOD_BAT": { id: "BLOOD_BAT", name: "Blood Bat", health: 20, maxHealth: 20, minAttack: 1, maxAttack: 3, element: null },
+        "FIRE_SLUG": { id: "FIRE_SLUG", name: "Fire Slug", health: 15, maxHealth: 15, minAttack: 4, maxAttack: 7, element: "fire" },
+        "CHILLING_SHADE": { id: "CHILLING_SHADE", name: "Chilling Shade", health: 35, maxHealth: 35, minAttack: 3, maxAttack: 8, element: "ice" },
+        "PHANTOM_PIPER": { id: "PHANTOM_PIPER", name: "Phantom Piper", health: 27, maxHealth: 27, minAttack: 5, maxAttack: 9, element: null },
+        "RANKED_REAPER": { id: "RANKED_REAPER", name: "Ranked Reaper", health: 42, maxHealth: 42, minAttack: 6, maxAttack: 10, element: null },
+        "GIGANTOR": { id: "GIGANTOR", name: "Gigantor", health: 200, maxHealth: 200, minAttack: 1, maxAttack: 2, element: null },
+    }
+    let availableAttacks = new Set(Object.values(attackLookUp));
+    let availableEnemies = new Set(Object.values(enemyLookup));
+    let selectedAttacks = new Set();
+    let selectedEnemy = null;
+    let battleCommands = [];
+    let enemyGroup = [];
+    let playerHealth = 100;
+    let maxHealthPotions = 10;
+    let healthPotions = 10;
+    let inBattle = false;
+
+    function clearNode(node) {
+        while (node.firstChild) {
+            node.firstChild.remove();
+        }
+    }
+    function createAttackTable(attacks) {
+        let node = document.getElementById("available_attacks");
+        clearNode(node);
+        attacks.forEach(attack => {
+            let div = document.createElement("div");
+            div.appendChild(document.createTextNode(attack.name));
+            div.appendChild(document.createTextNode(" | "));
+            div.appendChild(document.createTextNode(generateDescription(attack)));
+            div.appendChild(document.createTextNode(" | "));
+            div.appendChild(document.createTextNode(calculateProbability(attack) + "%"));
+            if (attack.probability) {
+                div.onclick = toggleAttack;
+            }
+            div.id = attack.id;
+            if (selectedAttacks.has(attack) && calculateProbability(attack) > 0) {
+                div.appendChild(document.createTextNode(" | EQUIPPED"));
+                div.classList.add("equipped");
+            } else {
+                div.appendChild(document.createTextNode(" | NOT EQUIPPED"));
+                div.classList.add("unequipped");
+            }
+            node.appendChild(div);
+        });
+
+    }
+    function toggleAttack(event) {
+        event.preventDefault();
+        let attack = attackLookUp[event.target.id];
+        if (selectedAttacks.has(attack)) {
+            selectedAttacks.delete(attack);
+        } else if (totalProbability() + attack.probability <= 100) {
+            selectedAttacks.add(attack);
+        } else {
+            console.log("Can't equip more attacks");
+        }
+        updateTables();
+    }
+    function generateDescription(attack) {
+        return `${attack.minDamage}-${attack.maxDamage} ${attack.type} damage to ${attack.range === "single" ? "target" : "all targets"}`;
+    }
+    function totalProbability() {
+        return Array.from(selectedAttacks.keys()).reduce((acc, attack) => acc + attack.probability, 0);
+    }
+    function calculateProbability(attack) {
+        if (attack.probability) {
+            return attack.probability;
+        }
+        return Math.max(100 - totalProbability(), 0);
+    }
+    function updateTables() {
+        createAttackTable(availableAttacks);
+    }
+    function addRequiredBasicAttacks() {
+        Array.from(availableAttacks.keys()).filter(
+            attack => attack.probability === null
+        ).forEach(attack => selectedAttacks.add(attack));
+    }
+    function updateInterface() {
+        let attackMenu = document.getElementById("attack_menu");
+        let battleMenu = document.getElementById("battle_menu");
+        if (inBattle) {
+            attackMenu.style.display = "none";
+            battleMenu.style.display = "block";
+        } else {
+            attackMenu.style.display = "block";
+            battleMenu.style.display = "none";
+        }
+    }
+    function progressBattle() {
+        document.getElementById("hero_health").innerHTML = playerHealth + " health points";
+
+        let slot1 = document.getElementById("action_slot_1");
+        let slot2 = document.getElementById("action_slot_2");
+        let slot3 = document.getElementById("action_slot_3");
+        let slot4 = document.getElementById("action_slot_4");
+        slot4.innerHTML = `Use 1 Health Potion (${healthPotions})`;
+
+        let attack1 = nextBattleCommand();
+        let attack2 = nextBattleCommand();
+        let attack3 = nextBattleCommand();
+
+        slot1.value = attack1.id;
+        slot1.title = generateDescription(attack1);
+        slot1.innerHTML = attack1.name;
+
+        slot2.value = attack2.id;
+        slot2.title = generateDescription(attack2);
+        slot2.innerHTML = attack2.name;
+
+        slot3.value = attack3.id;
+        slot3.title = generateDescription(attack3);
+        slot3.innerHTML = attack3.name;
+
+        let allEnemiesDefeated = enemyGroup.filter(enemy => enemy.health > 0).length === 0;
+        if (playerHealth <= 0 || allEnemiesDefeated) {
+            let actionSlots = document.getElementById("action_slots");
+            let battleMessage = document.getElementById("battle_message");
+            actionSlots.style.display = "none";
+            battleMessage.style.display = "block";
+            if (allEnemiesDefeated) {
+                battleMessage.innerHTML = "You defeated all monsters!";
+            } else {
+                battleMessage.innerHTML = "You lost this battle!";
+            }
+        } else {
+            let actionSlots = document.getElementById("action_slots");
+            let battleMessage = document.getElementById("battle_message");
+            actionSlots.style.display = "block";
+            battleMessage.style.display = "none";
+        }
+    }
+    function nextBattleCommand() {
+        if (battleCommands.length === 0) {
+            selectedAttacks.forEach(attack => {
+                let max = calculateProbability(attack);
+                for (let i = 0; i < max; i++) { battleCommands.push(attack); }
+            });
+        }
+        let next = battleCommands.shift();
+        return next;
+    }
+    function clearBattleLog() {
+        document.getElementById("battle_log").value = "";
+    }
+    function appendBattleLog(newEntry) {
+        let battleLog = document.getElementById("battle_log");
+        battleLog.value += newEntry;
+        battleLog.scrollTop = battleLog.scrollHeight;
+    }
+    function startBattle() {
+        clearBattleLog();
+        playerHealth = 100;
+        healthPotions = maxHealthPotions;
+        battleCommands = [];
+        selectedAttacks.forEach(attack => {
+            let max = calculateProbability(attack);
+            for (let i = 0; i < max; i++) { battleCommands.push(attack); }
+        });
+        battleCommands = TT.Random.shuffle(battleCommands);
+        inBattle = true;
+        createRandomEncounter();
+        progressBattle();
+        updateEnemyGroup();
+        updateInterface();
+    }
+    function createRandomEncounter() {
+        let maxEnemies = TT.Random.int(1, 5);
+        enemyGroup = TT.Random.choices(Array.from(availableEnemies), maxEnemies);
+        enemyGroup.forEach(enemy => {
+            enemy.health = enemy.maxHealth;
+        });
+    }
+    function updateEnemyGroup() {
+        let node = document.getElementById("enemy_group");
+        clearNode(node);
+        enemyGroup.forEach(enemy => {
+            let div = document.createElement("div");
+            div.appendChild(document.createTextNode(enemy.name));
+            div.appendChild(document.createTextNode(" | "));
+            div.appendChild(document.createTextNode(enemy.health + "/" + enemy.maxHealth + " health points"));
+            if (enemy.health > 0) {
+                div.onclick = function (event) {
+                    selectedEnemy = enemyLookup[event.target.id];
+                    updateEnemyGroup();
+                };
+            }
+            div.id = enemy.id;
+            if (selectedEnemy && selectedEnemy.id === enemy.id) {
+                div.classList.add("equipped");
+            }
+            node.appendChild(div);
+        });
+    }
+    function stopBattle() {
+        inBattle = false;
+        updateInterface();
+    }
+    function useHealthPotion() {
+        clearBattleLog();
+        enemyStrike();
+        if (playerHealth > 0 && healthPotions > 0) {
+            let healing = TT.Random.int(25, 50);
+            playerHealth = Math.min(playerHealth + healing, 100);
+            appendBattleLog(`Hero recovers ${healing} health points.\n`);
+            healthPotions--;
+        }
+
+        progressBattle();
+    }
+    function executeAttack(clicked) {
+        clearBattleLog();
+
+        let attack = attackLookUp[clicked.value];
+        if (!selectedEnemy || selectedEnemy.health === 0) {
+            let possibleTargets = enemyGroup.filter(enemy => enemy.health > 0);
+            selectedEnemy = TT.Random.choice(possibleTargets);
+        }
+        if (attack.range === "single" && selectedEnemy) {
+            let damage = TT.Random.int(attack.minDamage, attack.maxDamage);
+            selectedEnemy.health = Math.max(selectedEnemy.health - damage, 0);
+            appendBattleLog(`Hero attacks ${selectedEnemy.name} with ${attack.name} for ${damage}${attack.type ? " " + attack.type : ""} damage.\n`);
+
+        } else if (attack.range === "multi") {
+            let possibleTargets = enemyGroup.filter(enemy => enemy.health > 0);
+            possibleTargets.forEach(enemy => {
+                let damage = TT.Random.int(attack.minDamage, attack.maxDamage);
+                enemy.health = Math.max(enemy.health - damage, 0);
+                appendBattleLog(`Hero attacks ${enemy.name} with ${attack.name} for ${damage}${attack.type ? " " + attack.type : ""} damage.\n`);
+            })
+        }
+        updateEnemyGroup();
+        enemyStrike();
+        progressBattle();
+    }
+    function enemyStrike() {
+        enemyGroup.forEach(enemy => {
+            if (enemy.health > 0) {
+                let damage = TT.Random.int(enemy.minAttack, enemy.maxAttack);
+                appendBattleLog(`${enemy.name} hits for ${damage}${enemy.element ? " " + enemy.element : ""} damage.\n`);
+                playerHealth = Math.max(playerHealth - damage, 0);
+            }
+        });
+    }
+    updateInterface();
+    addRequiredBasicAttacks();
+    updateTables();
+</script>
+
+</html>
