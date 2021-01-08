@@ -10,41 +10,60 @@
 </head>
 
 <body>
-    <div>
-        <p onclick="restartGame();">Tome Travelers</p>
-        <canvas id="canvas" width="1920" height="1080" ondblclick="toggleFullscreen();"></canvas>
-    </div>
+    <header>Tome Travelers</header>
+    <nav>
+        <a href="index.html" class="button" target="_self" rel="noopener noreferrer">New game</a>
+        <a href="tutorial.html" class="button" target="_blank" rel="noopener noreferrer">Tutorial</a>
+    </nav>
+    <main>
+        <div id="gamescreen" onmousemove="TT.UI.handleIdleMousePointer();">
+            <div id="loading_indicator_container">
+                <label for="loading_indicator">Loading …</label>
+                <progress id="loading_indicator" max="100" value="0"></progress>
+            </div>
+
+            <canvas id="canvas" width="1920" height="1080"></canvas>
+
+            <div id="prompt_question_element">
+                <div id="prompt_question_title"></div>
+                <div id="prompt_question_body"></div>
+                <div id="prompt_question_buttons">
+                    <button id="prompt_question_negative" onclick="TT.UI.promptNegativeAnswer();"></button>
+                    <button id="prompt_question_positive" onclick="TT.UI.promptPositiveAnswer();"></button>
+                </div>
+            </div>
+
+            <div id="inventory_element">
+                <input id="radio_items" name="tab_group" type="radio" checked>
+                <input id="radio_diary" name="tab_group" type="radio">
+                <div class="inventory_tabs">
+                    <label class="inventory_tab" id="tab_selector_items" for="radio_items">Items</label>
+                    <label class="inventory_tab" id="tab_selector_diary" for="radio_diary">Diary</label>
+                </div>
+                <div>
+                    <div id="inventory_panel_items" class="inventory_panel"></div>
+                    <div id="inventory_panel_diary" class="inventory_panel"></div>
+                </div>
+            </div>
+
+            <div id="thought_bubble_element">
+                <p id="thought"></p>
+            </div>
+
+            <div id="world_id_indicator" title="Your world ID"></div>
+            <div id="fullscreen_mode_icon" onclick="TT.UI.toggleFullscreen();" title="Toggle fullscreen mode"></div>
+        </div>
+    </main>
     <footer>
-        <div>Copyright &copy; 2020 Tome Travelers. All Rights Reserved.
-        Inquiries to: <a href="mailto:tome.travelers@pm.me">tome.travelers@pm.me</a></div>
+        <p>
+            Copyright &copy; 2020&ndash;2021 Tome Travelers. All Rights Reserved.
+            Inquiries to: <a href="mailto:tome.travelers@pm.me">tome.travelers@pm.me</a>
+        </p>
     </footer>
 </body>
 
 <script>
     TT.Game.start();
-
-    function restartGame() {
-        TT.Storage.clearState();
-        window.location.replace("index.html");
-    }
-
-    function toggleFullscreen() {
-        let canvas = document.getElementById("canvas");
-
-        document.onfullscreenchange = function (event) {
-            event.target.classList.toggle("invisible_cursor");
-        }
-
-        if (document.fullscreenElement === canvas) {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-        } else {
-            if (canvas.requestFullscreen) {
-                canvas.requestFullscreen();
-            }
-        }
-    }
 </script>
 
 </html>

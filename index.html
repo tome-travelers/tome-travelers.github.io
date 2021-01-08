@@ -10,106 +10,54 @@
 </head>
 
 <body>
-    <div>
-        <p>Tome Travelers</p>
-        <input id="character_name" type="text" placeholder="Character name" />
-        <button type="button" onclick="suggestNames();">Suggest names</button>
-        <select name="books" id="books">
-            <option value="0" disabled selected hidden>Choose your favourite book</option>
-            <option value="113">Tarshil's Tome of Traps</option>
-            <option value="179">Eghara Fragments</option>
-            <option value="263">Grimoire of Nimboor</option>
-            <option value="317">Lophian Encyclopedia</option>
-            <option value="389">Codex of Righea Giants</option>
-            <option value="421">Gyldae's Scrolls</option>
-            <option value="853">Mystical Book of Myros</option>
-            <option value="971">Girshein Compendium</option>
-        </select>
-        <div id="name_suggestions" onclick="copyName()"></div>
-
-        <button type="button" onclick="startGame();">Start your adventure</button>
-    </div>
+    <header>Tome Travelers</header>
+    <nav>
+        <a href="index.html" class="button" target="_self" rel="noopener noreferrer">New game</a>
+        <a href="tutorial.html" class="button" target="_blank" rel="noopener noreferrer">Tutorial</a>
+    </nav>
+    <main>
+        <div>
+            <div>
+                <p>
+                    You are one of the infamous tome travelers who crawl through dungeons to discover books and gather
+                    long-lost knowledge.
+                </p>
+            </div>
+            <div>
+                <label for="character_name">Choose your character's name</label>
+                <input id="character_name" type="text" placeholder="" />
+                <span>or pick one of the suggestions:</span>
+                <span id="name_suggestions" onclick="copyName()"></span>
+                <button type="button" onclick="suggestNames();">Offer more name ideas</button>
+            </div>
+            <div>
+                <span>Choose your character's favourite book</span>
+                <select name="books" id="books">
+                    <option value="0" selected>No favourite book</option>
+                    <option value="113">Tarshil's Tome of Traps</option>
+                    <option value="179">Eghara Fragments</option>
+                    <option value="263">Grimoire of Nimboor</option>
+                    <option value="317">Lophian Encyclopedia</option>
+                    <option value="389">Codex of Righea Giants</option>
+                    <option value="421">Gyldae's Scrolls</option>
+                    <option value="853">Mystical Book of Myros</option>
+                    <option value="971">Girshein Compendium</option>
+                </select>
+            </div>
+            <div>
+                <button type="button" onclick="startGame();">Embark on your adventure</button>
+            </div>
+        </div>
+    </main>
     <footer>
-        <div>Copyright &copy; 2020 Tome Travelers. All Rights Reserved.
-            Inquiries to: <a href="mailto:tome.travelers@pm.me">tome.travelers@pm.me</a></div>
+        <p>
+            Copyright &copy; 2020&ndash;2021 Tome Travelers. All Rights Reserved.
+            Inquiries to: <a href="mailto:tome.travelers@pm.me">tome.travelers@pm.me</a>
+        </p>
     </footer>
 </body>
 
 <script>
-    function _randomLetter(letterProbability) {
-        let allLetters = [];
-
-        // Fill list according to their probability
-        for (const [letter, entry] of Object.entries(letterProbability)) {
-            for (let i = 0; i < entry.prob; i++) {
-                allLetters.push(letter);
-            }
-        }
-
-        // Shuffle
-        for (let i = allLetters.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * i)
-            const temp = allLetters[i]
-            allLetters[i] = allLetters[j]
-            allLetters[j] = temp
-        }
-
-        // Return a random letter from the list
-        return allLetters[(Math.random() * allLetters.length) | 0];
-    }
-
-    function _generateName() {
-        const firstVowelBlock = {
-            "a": { prob: 3 }, "e": { prob: 3 }, "i": { prob: 3 }, "o": { prob: 3 },
-            "u": { prob: 3 }, "y": { prob: 1 },
-        };
-        const firstConsonantBlock = {
-            "b": { prob: 2 }, "d": { prob: 1 }, "f": { prob: 1 }, "g": { prob: 2 },
-            "h": { prob: 1 }, "j": { prob: 2 }, "k": { prob: 2 }, "l": { prob: 2 },
-            "m": { prob: 3 }, "n": { prob: 3 }, "ph": { prob: 2 }, "r": { prob: 2 },
-            "s": { prob: 2 }, "sh": { prob: 2 }, "t": { prob: 2 }, "th": { prob: 1 },
-        };
-        const middleConsonantBlock = {
-            "b": { prob: 1 }, "d": { prob: 2 }, "f": { prob: 2 }, "g": { prob: 1 },
-            "gh": { prob: 2 }, "gr": { prob: 1 }, "l": { prob: 2 }, "ld": { prob: 2 },
-            "ll": { prob: 1 }, "lph": { prob: 1 }, "m": { prob: 2 }, "mb": { prob: 2 },
-            "n": { prob: 2 }, "nk": { prob: 1 }, "p": { prob: 2 }, "ph": { prob: 2 },
-            "pp": { prob: 2 }, "r": { prob: 2 }, "rr": { prob: 1 }, "rs": { prob: 1 },
-            "rsh": { prob: 1 }, "s": { prob: 2 }, "sh": { prob: 2 }, "sl": { prob: 1 },
-            "tr": { prob: 1 }, "tt": { prob: 2 }, "v": { prob: 2 }, "w": { prob: 2 },
-        };
-        const middleVowelBlock = {
-            "a": { prob: 5 }, "aa": { prob: 2 }, "ae": { prob: 4 }, "ay": { prob: 2 },
-            "e": { prob: 5 }, "ea": { prob: 4 }, "ei": { prob: 2 }, "ey": { prob: 2 },
-            "i": { prob: 5 }, "ia": { prob: 2 }, "ie": { prob: 2 }, "io": { prob: 2 },
-            "o": { prob: 5 }, "oa": { prob: 3 }, "oo": { prob: 2 }, "u": { prob: 5 },
-            "ua": { prob: 2 }, "y": { prob: 1 },
-        };
-        const lastConsonantBlock = {
-            "": { prob: 8 }, "ch": { prob: 1 }, "l": { prob: 2 }, "m": { prob: 3 },
-            "n": { prob: 3 }, "nd": { prob: 2 }, "ng": { prob: 1 }, "r": { prob: 3 },
-            "s": { prob: 3 }, "sh": { prob: 2 }, "th": { prob: 2 }, "tt": { prob: 1 },
-            "v": { prob: 1 },
-        };
-
-        const randomFirstVowel = _randomLetter(firstVowelBlock);
-        const randomFirstConsonant = _randomLetter(firstConsonantBlock);
-
-        const randomMiddleVowel = _randomLetter(middleVowelBlock);
-        const randomMiddleConsonant = _randomLetter(middleConsonantBlock);
-
-        const randomLastConsonant = _randomLetter(lastConsonantBlock);
-
-        const startWithConsonant = ((Math.random() * 100) | 0) < 50;
-
-        let name = randomFirstVowel + randomMiddleConsonant + randomMiddleVowel + randomLastConsonant;
-        if (startWithConsonant) {
-            name = randomFirstConsonant + name;
-        }
-
-        // Capitalize name
-        return name[0].toUpperCase() + name.slice(1);
-    }
 
     function _getSelectedText() {
         let text = "";
@@ -123,8 +71,8 @@
 
     function suggestNames() {
         let names = [];
-        for (let i = 0; i < 10; i++) {
-            names.push(_generateName());
+        for (let i = 0; i < 3; i++) {
+            names.push(TT.Names.randomCharacterName());
         }
         document.getElementById("name_suggestions").innerHTML = names.join(", ");
     }
@@ -142,7 +90,7 @@
     function calculateSeed(name) {
         let seed = 5107;
 
-        let books = document.getElementById("books");
+        const books = document.getElementById("books");
         seed = parseInt(books[books.selectedIndex].value) + (seed << 6) + (seed << 16) - seed;
 
         if (name && name.trim() !== "") {
@@ -159,13 +107,18 @@
 
     function startGame() {
         let name = document.getElementById("character_name").value;
+        let favouriteBook = parseInt(books[books.selectedIndex].value);
         if (name !== null && name !== undefined && name.length > 1) {
             let seed = calculateSeed(name);
-            TT.Storage.initState(name, seed);
+            TT.Storage.initState(name, favouriteBook, seed);
         }
         window.location.replace("game.html");
     }
 
+    function initForm() {
+        suggestNames(); // Prefill name suggestions
+    }
+    initForm();
 </script>
 
 </html>
