@@ -106,6 +106,7 @@
     }
 
     function startGame() {
+        TT.Storage.clearState();
         let name = document.getElementById("character_name").value;
         let favouriteBook = parseInt(books[books.selectedIndex].value);
         if (name !== null && name !== undefined && name.length > 1) {

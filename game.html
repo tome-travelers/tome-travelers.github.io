@@ -9,7 +9,7 @@
     <script src="js/game.min.js"></script>
 </head>
 
-<body>
+<body class="no_overflow_body">
     <header>Tome Travelers</header>
     <nav>
         <a href="index.html" class="button" target="_self" rel="noopener noreferrer">New game</a>
@@ -18,7 +18,7 @@
     <main>
         <div id="gamescreen" onmousemove="TT.UI.handleIdleMousePointer();">
             <div id="loading_indicator_container">
-                <label for="loading_indicator">Loading …</label>
+                <label id="loading_label" for="loading_indicator">Loading …</label>
                 <progress id="loading_indicator" max="100" value="0"></progress>
             </div>
 
@@ -33,16 +33,52 @@
                 </div>
             </div>
 
+            <div id="reward_element">
+                <div id="reward_title"></div>
+                <div id="reward_body"></div>
+                <div id="reward_buttons">
+                    <button onclick="TT.UI.hideRewardPopUp();">Okay</button>
+                </div>
+            </div>
+
+            <div id="reward_feed"></div>
+
             <div id="inventory_element">
                 <input id="radio_items" name="tab_group" type="radio" checked>
                 <input id="radio_diary" name="tab_group" type="radio">
+                <input id="radio_battle" name="tab_group" type="radio">
+                <input id="radio_log" name="tab_group" type="radio">
                 <div class="inventory_tabs">
-                    <label class="inventory_tab" id="tab_selector_items" for="radio_items">Items</label>
-                    <label class="inventory_tab" id="tab_selector_diary" for="radio_diary">Diary</label>
+                    <label class="inventory_tab" id="tab_selector_items" for="radio_items">
+                        <div class="inventory_tab_header">
+                            <img src="assets/ui/menu_icon_inventory.png" class="inventory_tab_header_icon" />
+                            <span>Items</span>
+                        </div>
+                    </label>
+                    <label class="inventory_tab" id="tab_selector_diary" for="radio_diary">
+                        <div class="inventory_tab_header">
+                            <img src="assets/ui/menu_icon_diary.png" class="inventory_tab_header_icon" />
+                            <span>Diary</span>
+                        </div>
+                    </label>
+                    <label class="inventory_tab" id="tab_selector_battle" for="radio_battle">
+                        <div class="inventory_tab_header">
+                            <img src="assets/ui/menu_icon_battle.png" class="inventory_tab_header_icon" />
+                            <span>Battle</span>
+                        </div>
+                    </label>
+                    <label class="inventory_tab" id="tab_selector_log" for="radio_log">
+                        <div class="inventory_tab_header">
+                            <img src="assets/ui/menu_icon_log.png" class="inventory_tab_header_icon" />
+                            <span>Log</span>
+                        </div>
+                    </label>
                 </div>
                 <div>
                     <div id="inventory_panel_items" class="inventory_panel"></div>
                     <div id="inventory_panel_diary" class="inventory_panel"></div>
+                    <div id="inventory_panel_battle" class="inventory_panel"></div>
+                    <div id="inventory_panel_log" class="inventory_panel"></div>
                 </div>
             </div>
 
@@ -53,7 +89,8 @@
                         <p>That last one really hurt my feelings!</p>
                     </div>
                     <div>
-                        <a href="index.html" class="button" target="_self" rel="noopener noreferrer">Start a new game</a>
+                        <a href="index.html" class="button" target="_self" rel="noopener noreferrer">Start a new
+                            game</a>
                     </div>
                 </div>
             </div>
