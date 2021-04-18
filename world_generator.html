@@ -1,0 +1,164 @@
+<html>
+
+<head>
+    <title>World Generator</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <canvas id="canvas" width="1300" height="900" style="border: 1px solid red;"></canvas>
+</body>
+
+<script>
+    const _canvas = document.getElementById("canvas");
+    const _context = _canvas.getContext('2d');
+
+    function _drawRect(x, y, size, color) {
+        _context.fillStyle = color;
+        _context.fillRect(x, y, size, size);
+    }
+
+    var SimplexNoise = function (r) {
+        if (r == undefined) {
+            r = Math
+        };
+        this.grad3 = [
+            [1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0],
+            [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1],
+            [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]
+        ];
+        this.p = [];
+        for (var i = 0; i < 256; i++) {
+            this.p[i] = Math.floor(r.random() * 256);
+        }
+        // To remove the need for index wrapping, double the permutation table length 
+        this.perm = [];
+        for (var i = 0; i < 512; i++) {
+            this.perm[i] = this.p[i & 255];
+        }
+
+    };
+
+    SimplexNoise.prototype.dot = function (g, x, y) {
+        return g[0] * x + g[1] * y;
+    };
+
+    SimplexNoise.prototype.noise = function (xin, yin) {
+        let n0, n1, n2; // Noise contributions from the three corners 
+        // Skew the input space to determine which simplex cell we're in 
+        const f2 = 0.5 * (Math.sqrt(3.0) - 1.0);
+        const s = (xin + yin) * f2; // Hairy factor for 2D 
+        const i = Math.floor(xin + s);
+        const j = Math.floor(yin + s);
+        const g2 = (3.0 - Math.sqrt(3.0)) / 6.0;
+        const t = (i + j) * g2;
+        const xx0 = i - t; // Unskew the cell origin back to (x,y) space 
+        const yy0 = j - t;
+        const x0 = xin - xx0; // The x,y distances from the cell origin 
+        const y0 = yin - yy0;
+        // For the 2D case, the simplex shape is an equilateral triangle. 
+        // Determine which simplex we are in. 
+        let i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords 
+        if (x0 > y0) { i1 = 1; j1 = 0; } // lower triangle, XY order: (0,0)->(1,0)->(1,1) 
+        else { i1 = 0; j1 = 1; }      // upper triangle, YX order: (0,0)->(0,1)->(1,1) 
+        // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and 
+        // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where 
+        // c = (3-sqrt(3))/6 
+        const x1 = x0 - i1 + g2; // Offsets for middle corner in (x,y) unskewed coords 
+        const y1 = y0 - j1 + g2;
+        const x2 = x0 - 1.0 + 2.0 * g2; // Offsets for last corner in (x,y) unskewed coords 
+        const y2 = y0 - 1.0 + 2.0 * g2;
+        // Work out the hashed gradient indices of the three simplex corners 
+        const ii = i & 255;
+        const jj = j & 255;
+        const gi0 = this.perm[ii + this.perm[jj]] % 12;
+        const gi1 = this.perm[ii + i1 + this.perm[jj + j1]] % 12;
+        const gi2 = this.perm[ii + 1 + this.perm[jj + 1]] % 12;
+        // Calculate the contribution from the three corners 
+        let t0 = 0.5 - x0 * x0 - y0 * y0;
+        if (t0 < 0) {
+            n0 = 0.0;
+        } else {
+            t0 *= t0;
+            n0 = t0 * t0 * this.dot(this.grad3[gi0], x0, y0);  // (x,y) of grad3 used for 2D gradient 
+        }
+        let t1 = 0.5 - x1 * x1 - y1 * y1;
+        if (t1 < 0) {
+            n1 = 0.0;
+        } else {
+            t1 *= t1;
+            n1 = t1 * t1 * this.dot(this.grad3[gi1], x1, y1);
+        }
+        let t2 = 0.5 - x2 * x2 - y2 * y2;
+        if (t2 < 0) {
+            n2 = 0.0;
+        } else {
+            t2 *= t2;
+            n2 = t2 * t2 * this.dot(this.grad3[gi2], x2, y2);
+        }
+        // Add contributions from each corner to get the final noise value. 
+        // The result is scaled to return values in the interval [-1,1]. 
+        return 70.0 * (n0 + n1 + n2);
+    };
+
+    // Create noise array
+    const sn = new SimplexNoise();
+    const freq = 23;
+    const size = 256;
+    const noiseArray = Array(size).fill([]);
+    for (let x = 0; x < size; x++) {
+        noiseArray[x] = Array(size).fill([]);
+        for (let y = 0; y < size; y++) {
+            const noiseValue = sn.noise(
+                (x / freq) + (Math.random() / freq),
+                (y / freq) + (Math.random() / freq)
+            );
+            noiseArray[x][y] = noiseValue;
+        }
+    }
+    // Create province list
+    const provinces = [];
+    const open = [];
+    let provinceId = 1;
+    for (let x = 0; x < size; x += 14) {
+        for (let y = 0; y < size; y += 14) {
+            const province = { x: x, y: y, id: provinceId };
+            provinces.push(province);
+            open.push(province);
+            provinceId++;
+        }
+    }
+    const taken = Array(size).fill([]);
+    for (let x = 0; x < size; x++) {
+        taken[x] = Array(size).fill([]);
+        for (let y = 0; y < size; y++) {
+        }
+    }
+
+    const pixelSize = 10;
+    let maxV = -999;
+    let minV = 999;
+    for (let x = 0; x < 130; x++) {
+        for (let y = 0; y < 90; y++) {
+            const noiseValue = (sn.noise(
+                (x / freq) + (Math.random() / freq),
+                (y / freq) + (Math.random() / freq)
+            ) + 1) / 2;
+
+            if (noiseValue < minV) { minV = noiseValue; }
+            if (noiseValue > maxV) { maxV = noiseValue; }
+
+            let color = "black";
+            if (noiseValue < 0.4) { color = "#39bee9"; } // Water
+            else if (noiseValue < 0.48) { color = "#f8f4e1"; } // Sand
+            else if (noiseValue < 0.8) { color = "#91c788"; } // Grass
+            else if (noiseValue < 0.92) { color = "#52734d"; } // Forest
+            else { color = "#4e3620"; } // Mountain
+            _drawRect(x * pixelSize, y * pixelSize, pixelSize, color);
+        }
+    }
+    console.log("min", minV, "max", maxV);
+
+</script>
+
+</html>

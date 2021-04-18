@@ -1,0 +1,170 @@
+<html>
+
+<head>
+    <title>City Name Generator</title>
+    <style>
+        #cityNames {
+            font-size: 2rem;
+        }
+
+        .cityNameVariants {
+            font-size: 1.4rem;
+        }
+
+        label,
+        input {
+            border: 1px solid blue;
+            background: #EEE;
+            padding: 4px;
+            margin: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <label for="regionSelection">Region:</label>
+    <select name="regionSelection" id="regionSelection" multiple="multiple" size="9">
+        <option value="english" selected>English</option>
+        <option value="franconian" selected>Franconian</option>
+        <option value="german" selected>German</option>
+        <option value="iberian" selected>Iberian</option>
+        <option value="japanese" selected>Japanese</option>
+        <option value="levantine" selected>Levantine</option>
+        <option value="nordic" selected>Nordic</option>
+        <option value="slavic" selected>Slavic</option>
+    </select>
+
+    <label for="showVariants">
+        <span>Show variants</span>
+        <input type="checkbox" id="showVariants" name="showVariants" />
+    </label>
+
+    <label for="shuffleResult">
+        <span>Shuffle result</span>
+        <input type="checkbox" id="shuffleResult" name="shuffleResult" checked="checked" />
+
+    </label>
+
+    <label for="showAll">
+        <span>Show all</span>
+        <input type="checkbox" id="showAll" name="showAll" />
+    </label>
+
+
+    <input type="button" id="generateButton" name="generateButton" value="Generate cities" onclick="buttonClick()" />
+
+    <span id="statistics"></span>
+
+    <div id="cityNames"></div>
+</body>
+
+<script>
+    function capitalizeString(t) { return t.split(" ").map(t => t.charAt(0).toUpperCase() + t.slice(1)).join(" ") }
+    function shuffle(t) { for (let n = t.length - 1; n > 0; n--) { const r = Math.floor(Math.random() * (n + 1));[t[n], t[r]] = [t[r], t[n]] } return t }
+
+    const cityPrefixes = {
+        "english": ["great ", "little ", "lower ", "new ", "old ", "upper "],
+        "franconian": ["nieuw", "oud", "grot"],
+        "german": ["alt", "groß", "hoch", "klein", "neu", "nieder", "ober", "unter"],
+        "iberian": ["dos ", "el ", "las "],
+        "japanese": ["ō"],
+        "levantine": ["al ", "bir ", "abu ", "ar "],
+        "nordic": ["Ny"],
+        "slavic": ["bijel", "crn", "donj", "gornj", "mal", "nov", "star", "velik"],
+    };
+    const cityNames = {
+        "english": ["bourne", "bray", "draught", "drom", "dun", "eagle", "grant", "kings", "mull", "ply", "shrew", "stal", "taver", "thorn", "wex", "white", "winch", "wolf"],
+        "franconian": ["dintel", "donker", "duiven", "graven", "haaken", "huij", "oost", "oppen", "spijk", "steijn", "valken"],
+        "german": ["ahlen", "bären", "detzen", "düben", "eich", "eschen", "fahlen", "fürsten", "greben", "hirsch", "ilmen", "klingen", "königs", "loh", "metzen", "nürn", "rathen", "roden", "roß", "schön", "schwal", "schwarzen", "treben", "trendel", "uelzen", "ummen", "vils", "wapel", "wald", "weißen", "wennen", "zell", "zwingen"],
+        "iberian": ["aca", "bena", "huan", "mata", "mira", "muño", "peña", "sala"],
+        "japanese": ["asa", "deku", "hime", "higa", "hon", "iwa", "izu", "kuma", "naga", "nobu", "miza", "sako", "shi", "shima", "suzo", "taka", "toyo", "ushi", "yama", "yoko"],
+        "levantine": ["ara", "asfa", "fay", "ghaz", "hami", "khas", "kish", "qaid", "qali", "shu"],
+        "nordic": ["aale", "frå", "fränn", "gård", "grön", "jond", "lund", "melle", "mor", "rød", "snoge", "sør"],
+        "slavic": ["đaku", "galo", "hrav", "među", "petro", "piro", "rov", "šar", "suro", "trava", "tol", "vruće", "žato", "zlato"],
+    };
+    const citySuffixes = {
+        "english": ["borough", "bury", "cester", "field", "ford", "grove", "ham", "hill", "more", "shire", "ton", "wick"],
+        "franconian": ["broek", "daal", "foort", "gen", "hoek", "hoorn", "hout", "hoven", "huizen", "kerk", "koog", "plaats", "veen", "wijk", "zand"],
+        "german": ["au", "bach", "berg", "bruch", "burg", "dorf", "eck", "feld", "fels", "furt", "hafen", "hain", "hausen", "heide", "heim", "hof", "hofen", "horn", "kirchen", "mark", "mühle", "rade", "stadt", "stein", "tal", "thal", "wald", "weiler", "winkel", "zell"],
+        "iberian": ["bal", "cia", "cón", "das", "dero", "do", "mán", "paro", "po", "reno", "res", "rillo", "sca", "sí", "tara", "tello"],
+        "japanese": ["chi", "jō", "ka", "kawa", "ma", "no", "mori", "moto", "shima", "shū", "tani", "to", "ya", "yama", "yashi", "zawa", "zumi"],
+        "levantine": ["dah", "dat", "ghab", "kah", "waq", "yah"],
+        "nordic": ["borg", "by", "dal", "holm", "hult", "landa", "rup", "stad", "strop"],
+        "slavic": ["čak", "grad", "ka", "lić", "lja", "nej", "nice", "nin", "rica", "roš", "ša", "sak", "snik", "sto", "stok", "vac", "var", "vje", "vo"],
+    };
+
+    function generateCityNames(selectedLanguages) {
+        const cities = [];
+        const stats = { entries: 0, variants: 0 };
+        selectedLanguages.forEach(language => {
+            cityNames[language].forEach(cityName => {
+                citySuffixes[language].forEach(citySuffix => {
+                    if (cityName !== citySuffix) {
+
+                        let mergedName = cityName + citySuffix;
+                        // Prevent double letters in Slavic languages
+                        if (language === "slavic" && cityName[cityName.length - 1] === citySuffix[0]) {
+                            mergedName = cityName + citySuffix.slice(1);
+                        }
+                        const variants = cityPrefixes[language].map(cityPrefix => {
+                            if (language === "slavic") { // Handle Slavic gendered endings for prefix
+                                if (mergedName.endsWith("a")) {
+                                    return capitalizeString(cityPrefix + "a " + mergedName);
+                                } else if (mergedName.endsWith("o") || mergedName.endsWith("e")) {
+                                    if (cityPrefix === "donj" || cityPrefix === "gornj") {
+                                        return capitalizeString(cityPrefix + "e " + mergedName);
+                                    } else {
+                                        return capitalizeString(cityPrefix + "o " + mergedName);
+                                    }
+                                } else {
+                                    return capitalizeString(cityPrefix + "i " + mergedName);
+                                }
+                            } else if (language === "franconian") { // Handle Franconian prefixes separated by a dash
+                                return capitalizeString(cityPrefix) + "-" + capitalizeString(mergedName);
+                            }
+                            return capitalizeString(cityPrefix + mergedName);
+                        });
+
+                        cities.push({
+                            name: capitalizeString(mergedName),
+                            variants: variants,
+                            language: language,
+                        });
+
+                        stats.entries += 1;
+                        stats.variants += variants.length;
+                    }
+                });
+            });
+        });
+
+        document.getElementById("statistics").innerHTML = `Total number of unique cities: ${stats.entries} | Total number of city variants: ${stats.variants}`;
+
+        const allNames = [];
+        cities.forEach(city => {
+            let entry = `<div>${city.name}`;
+            if (document.getElementById("showVariants").checked && city.variants.length > 0) {
+                entry += ` – <span class="cityNameVariants">${city.variants.join(", ")}</span>`;
+            }
+            entry += `</div>`;
+            allNames.push(entry);
+        });
+
+        if (document.getElementById("shuffleResult").checked) {
+            shuffle(allNames);
+        }
+
+        if (document.getElementById("showAll").checked) {
+            return allNames
+        } else {
+            return allNames.slice(0, 20);
+        }
+    }
+
+    function buttonClick() {
+        const selectedLanguages = Array.from(document.getElementById("regionSelection").selectedOptions).map(o => o.value);
+        document.getElementById("cityNames").innerHTML = generateCityNames(selectedLanguages).join("");
+    }
+</script>
+
+</html>
