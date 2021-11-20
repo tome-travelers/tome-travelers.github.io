@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tome Travelers - Tutorial</title>
+    <meta charset="utf-8">
+
+    <link rel="shortcut icon" type="image/png" href="favicon.png" sizes="any">
+    <link rel="stylesheet" href="css/tome_travelers.css">
+</head>
+
+<body>
+    <header>Tome Travelers</header>
+    <nav>
+        <a href="index.html" class="button" target="_self" rel="noopener noreferrer">New game</a>
+        <button type="button" class="button" disabled>Settings</button>
+        <a href="tutorial.html" class="button" target="_blank" rel="noopener noreferrer">Tutorial</a>
+        <a href="credits.html" class="button" target="_blank" rel="noopener noreferrer">Credits</a>
+    </nav>
+    <main>
+        <div class="tutorials">
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1_toggle">Controls</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        To move around use
+                        <em class="key_hint">W</em><em class="key_hint">A</em>
+                        <em class="key_hint">S</em><em class="key_hint">D</em> or
+                        <em class="key_hint">&#129145;</em><em class="key_hint">&#129144;</em>
+                        <em class="key_hint">&#129147;</em><em class="key_hint">&#129146;</em>.
+                    </p>
+                    <p>
+                        Access the inventory and diary with <em class="key_hint">I</em> and
+                        press it again to close the menu.
+                        Navigate between the tabs with the mouse or
+                        <em class="key_hint">Q</em> and <em class="key_hint">E</em>.
+                        If there are tabs within a tab then <em class="key_hint">A</em> and <em class="key_hint">D</em>
+                        help you navigate between them or you can also just click on them with a mouse.
+                    </p>
+                    <p>
+                        Interact with objects in the world by pressing <em class="key_hint">K</em>.
+                        You can also enter or leave towns and dungeons with the <em class="key_hint">K</em> key.
+                    </p>
+                    <p>
+                        Do you want to adjust your walking speed?
+                        Press <em class="key_hint">&#x21E7;Shift</em> to toggle between running and walking.
+                    </p>
+                    <p>
+                        Cycle through the different map styles with <em class="key_hint">M</em> if you already
+                        learned any cartography skills.
+                    </p>
+                    <p>
+                        For transcendental traveling you press <em class="key_hint">P</em> to set the pathway and by
+                        pressing <em class="key_hint">T</em> you will travel to that location.
+                    </p>
+                    <p>
+                        In the battle you activate your equipped attacks by pressing the corresponding keys for each
+                        level:
+                        <em class="key_hint">1</em>, <em class="key_hint">2</em>,
+                        <em class="key_hint">3</em>, and <em class="key_hint">4</em>.
+                    </p>
+                    <p>
+                        If there are multiple enemies in a battle you can cycle through the enemies with
+                        <em class="key_hint">A</em>/<em class="key_hint">D</em> or <em class="key_hint">&#129144;</em>
+                        <em class="key_hint">&#129146;</em>.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1a_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1a_toggle">Dungeon – General</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        You start with a full life meter. You can see it in the top left corner of the screen.
+                        You can't replenish your life meter!
+                    </p>
+                    <p>
+                        If your life meter hits zero, then you will lose the game and you have to start from the
+                        beginning.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/life_bar.png" /></div>
+                    <p>
+                        Each dungeon has a special key that you need to enter the final room of the dungeon.
+                        So keep your eyes open for that key!
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/final_room_key.png" /></div>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1b_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1b_toggle">Dungeon – Battle – Information
+                    1</label>
+                <div class="tutorial_section_content">
+                    <div class="tutorial_image"><img src="assets/tutorial/battle_screen_01.png" /></div>
+                    <p>
+                        Info 1 – That label displays your name.
+                    </p>
+                    <p>
+                        Info 2 – This is your battle health bar and decreases when you take damage in battle.
+                        You can replenish your battle health bar with items you find in the dungeon.
+                        If your battle health bar reaches zero, the battle is lost and you deplete one chunk of your
+                        life meter.
+                    </p>
+                    <p>
+                        Info 3 – This is your battle speed bar. It slowly fills up during the battle depending on your
+                        speed. If it is fully charged, then it's your turn and you can use items and attack the enemy.
+                    </p>
+                    <p>
+                        Info 4 – These are your available attacks. You can equip one attack per level and you can change
+                        the attacks during a battle when it's your turn. A green frame around one attack indicates that
+                        it's ready to be used.
+                    </p>
+                    <p>
+                        Info 5 – Level 3 and level 4 attacks need to be charged before they are ready to be used. When
+                        you use level 1 and level 2 attacks you can charge up the more powerful attacks. As long as you
+                        see a (partially) red frame around an attack, it's not ready yet and still needs to be charged.
+                    </p>
+                    <p>
+                        Info 6 – If you don't have an attack for a particular level equipped, then you see this
+                        placeholder symbol. Find and equip an attack to make this slot available.
+                    </p>
+                    <p>
+                        Info 7 – This tiny indicator tells you whose turn it is currently.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1c_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1c_toggle">Dungeon – Battle – Information
+                    2</label>
+                <div class="tutorial_section_content">
+                    <div class="tutorial_image"><img src="assets/tutorial/battle_screen_02.png" /></div>
+                    <p>
+                        Info 1 – That label displays the name of the enemy.
+                    </p>
+                    <p>
+                        Info 2 – This is the enemy's battle health bar and decreases when you deal damage to the enemy.
+                        If the enemy's battle health bar reaches zero, the enemy dies and won't participate in the
+                        battle anymore. If all enemies in a battle are defeated you will win the battle and obtain
+                        useful battle spoils afterwards.
+                    </p>
+                    <p>
+                        Info 3 – This is the enemy's battle speed bar. It slowly fills up during the battle depending on
+                        the enemy's speed. If it is fully charged, then it's the enemy's turn and they will attack.
+                    </p>
+                    <p>
+                        Info 4 – This tiny indicator marks the currently selected enemy. When it's your turn you can
+                        change the selection. If your attack targets all enemies, then the selection does not matter.
+                        You can't select defeated enemies.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1d_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1d_toggle">Dungeon – Battle – Elements –
+                    General</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        There are seven different elements that have an influence on how strong an attack is.
+                        Each element has certain strengths and weaknesses. Observe enemy's appearance, names, and
+                        attacks that might reveal their elements. Use your knowledge collected this way to your
+                        advantage in battles against particularly strong enemies.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/elements.png" /></div>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1e_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1e_toggle">Dungeon – Battle – Elements –
+                    Fire <span class="icon_element_fire icon_headline"></span></label>
+                <div class="tutorial_section_content">
+                    <p>
+                        <i>Fire</i> easily melts <i>Frost</i>. Also the <i>Fire</i> helps purifying <i>Gloom</i>
+                        enemies. On the other hand, <i>Fire</i> is a poor choice against <i>Rock</i> enemies as
+                        there is little to burn. There are more elements <i>Fire</i> is effective against so
+                        try to use it on different enemy types and see how they react. You also might discover more
+                        weaknesses this way.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1f_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1f_toggle">Dungeon – Battle – Elements –
+                    Galvanism <span class="icon_element_galvanism icon_headline"></span></label>
+                <div class="tutorial_section_content">
+                    <p>
+                        <i>Galvanism</i> is an excellent choice against <i>Blunt</i> and <i>Piercing</i> elements as
+                        their metal parts amplify electric charges. On the other hand, <i>Galvanism</i> is a poor choice
+                        against <i>Rock</i> and <i>Fire</i> enemies as there is no conducting material. There are more
+                        elements <i>Galvanism</i> is effective against so try to use it on different enemy types and
+                        see how they react. You also might discover more weaknesses this way.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1g_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1g_toggle">Dungeon – Battle – Elements –
+                    Piercing <span class="icon_element_piercing icon_headline"></span></label>
+                <div class="tutorial_section_content">
+                    <p>
+                        <i>Piercing</i> attacks easily puncture the brittle ice crystals so use it against <i>Frost</i>
+                        enemies. On the other hand, <i>Piercing</i> is a poor choice against the heavy armor of
+                        <i>Blunt</i> enemies. Also against <i>Rock</i> enemies <i>Piercing</i> attacks are not
+                        effective as their puncturing effects get dampened by the hard surface. There are more elements
+                        <i>Piercing</i> is effective against so try to use it on different enemy types and see how
+                        they react. You also might discover more weaknesses this way.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1h_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1h_toggle">Dungeon – Battle – Elements –
+                    Blunt <span class="icon_element_blunt icon_headline"></span></label>
+                <div class="tutorial_section_content">
+                    <p>
+                        <i>Blunt</i> attacks quickly smashes
+                        <i>Rock</i> and <i>Frost</i>
+                        enemies to smithereens. On the other hand, <i>Blunt</i> is
+                        a poor choice against <i>Galvanism</i> as the huge
+                        amount of metal helps conducting the electricity. There are more elements
+                        <i>Blunt</i> is effective against so try to use it on
+                        different enemy types and see how they react. You also might discover more weaknesses this way.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1i_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1i_toggle">Dungeon – Battle – Elements –
+                    Gloom <span class="icon_element_gloom icon_headline"></span></label>
+                <div class="tutorial_section_content">
+                    <p>
+                        <i>Gloom</i> induces fear even in the strongest
+                        warriors and thus is great against <i>Piercing</i>
+                        and <i>Blunt</i> enemies. On the other hand,
+                        <i>Gloom</i> is negated by the purifying nature
+                        of <i>Fire</i> enemies. There are more elements
+                        <i>Gloom</i> is effective against so try to use
+                        it on different enemy types and see how they react. You also might discover more
+                        weaknesses this way.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1j_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1j_toggle">Dungeon – Battle – Elements –
+                    Frost <span class="icon_element_frost icon_headline"></span></label>
+                <div class="tutorial_section_content">
+                    <p>
+                        <i>Frost</i> drills its icy fingers even into the
+                        most dreadful creatures and thus it's an excellent choice against
+                        <i>Gloom</i> enemies. Also
+                        <i>Frost</i> creeps into the tiniest cracks and damages
+                        <i>Rock</i> elements from within. There are more elements
+                        <i>Frost</i> is effective against so try to use it on
+                        different enemy types and see how they react. You also might discover more weaknesses this way.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1k_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1k_toggle">Dungeon – Battle – Elements –
+                    Rock <span class="icon_element_rock icon_headline"></span></label>
+                <div class="tutorial_section_content">
+                    <p>
+                        <i>Rock</i> extinguishes
+                        <i>Fire</i> enemies with ease.
+                        Also <i>Rock</i> is great against grounding
+                        <i>Galvanism</i> enemies. There are more
+                        elements <i>Rock</i> is effective against so try to use it on
+                        different enemy types and see how they react. You also might discover more weaknesses this way.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_1l_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_1l_toggle">Overworld – General</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        You can move around the world freely. However, you need a ship to cross water. During your
+                        journey across the world you sometimes stumble upon useful resources like rocks, wood, insects,
+                        eggs, or fish.
+                    </p>
+                    <p>
+                        There are a towns scattered across the continents. In these towns you can restock on potions at
+                        the market or sell resources you collected. Also it's always a good idea to stop by the local
+                        inn and listen to the gossip.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/overworld.png" /></div>
+                    <p>
+                        If you are in the possession of the Colossal Cartography Compendium then you can see the map of
+                        the world. The giant golden pin is your current location. The house with a red roof marks towns.
+                        The cave icons represent dungeons. Having a silver crown on the cave icon means that you
+                        finished a dungeon successfully. The golden crown on the cave icon symbolizes the fact that you
+                        completely explored the dungeon.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/world_map.png" /></div>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_2_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_2_toggle">Puzzles – General</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        You might encounter different types of puzzles in the dungeons. All of these puzzles require a
+                        slightly different approach in solving them. As a true tome traveler and adventurer you can try
+                        figuring out the solution by yourself.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_3_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_3_toggle">Puzzles – Huge Engraved
+                    Runestones</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        Did you stumble across four huge runestones with obscure inscriptions?
+                        Standing in front of them and touching the engraving will trigger a hidden mechanism
+                        which lowers the stones into the ground. Activate them in the correct order to reveal a secret.
+                        Search the nearby rooms for hints.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/puzzle_switches.png" /></div>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_4_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_4_toggle">Puzzles – Cryptic Floor Tiles –
+                    Part1</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        You might have seen rooms where some of the tiles have peculiar symbols on them.
+                        Interacting with one of the tiles changes them and affects all adjacent ones as well.
+                        The floor would look marvelous if all the tiles would show the same symbol.
+                        Then, the cryptic floor will give out its secret.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/puzzle_two_colors.png" /></div>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_5_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_5_toggle">Puzzles – Cryptic Floor Tiles –
+                    Part 2</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        Rumor has it that a challenging variant of these cryptic floor tiles exists. The behavior is
+                        almost identical, but activating tiles alternates between more symbols than its ordinary
+                        relative. Indeed, an intriguing mystery and doubtlessly lavishly rewarding.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/puzzle_three_colors.png" /></div>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_6_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_6_toggle">Puzzles – Cryptic Floor Tiles –
+                    Part 3</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        There is a scholar going by the name of Regshom who studied these cryptic floor tiles
+                        intensively. Apparently, Regshom deciphered the algebraic formula behind the tiles.
+                        Getting his advice most definitely brings you closer to the treasures guarded by these
+                        puzzles. However, people say that Regshom demands a hefty price for his knowledge.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/puzzle_regshom.png" /></div>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_7_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_7_toggle">Books – General</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        Throughout your journey you will come across a broad array of books teaching you survival and
+                        battle skills. Thus most of the books will benefit your progress and might even play an
+                        essential role in your success. Some books, however, hold sinister secrets.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_8_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_8_toggle">Books – The Epitome of
+                    Emptiness</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        After reading the book, a vast void unfolds deep inside you. As long as this book is in your
+                        possession, you will notice a dark blue aura around certain crates, jars, and barrels.
+                        This dark aura reflects the state of the object: Unworldly emptiness.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/book_emptiness.png" /></div>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_9_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_9_toggle">Books – The Prosperous
+                    Parchments</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        After reading the book, your mind feels sudden comfort. As long as this book is in
+                        your possession, you will notice a bright golden aura around certain crates, jars, and barrels.
+                        This radiant aura reflects the state of the object: Worldy wealth.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/book_money.png" /></div>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_10_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_10_toggle">Books – The Unlocked Scrolls of
+                    Latri</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        After reading the book, your inner ear picks up a distant clack of a door lock. As long as this
+                        book is in your possession, you will notice a glowing red aura around certain crates, jars, and
+                        barrels. This warming aura reflects the state of the object: Unbarred passage.
+                    </p>
+                    <div class="tutorial_image"><img src="assets/tutorial/book_keys.png" /></div>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_11_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_11_toggle">Books – Mograv's Manuscripts of
+                    Magical Machines</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        Mograv was an exceptionally gifted inventor. With her manuscripts you develop the instinctive
+                        feeling of recognizing which of the huge engraved runestones you have to activate first to make
+                        the hidden mechanism click.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_12_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_12_toggle">Books – The Collected Works of
+                    Regshom, Vol. I + II</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        The scholar Regshom deciphered the algebraic formula that sits behind the cryptic floor tiles.
+                        With the first volume you understand the ordinary variant and you know which tile to activate
+                        first. The second volume dives into the innards of the more challenging version to also master
+                        these with ease.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_13_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_13_toggle">Books – Transcendental Traveling
+                    Tome</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        Scholars all over the world consider this work to be nothing but a fraud. Only a few give
+                        credence to spiritual pathways connecting two different locations. As long as this book is in
+                        your possession, you can create a temporary pathway at any location. Traveling through that
+                        pathway destabilizes it.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_14_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_14_toggle">Books – The Colossal Cartography
+                    Compendium, Vol. I - IV</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        Written centuries ago, the Colossal Cartography Compendium is still the best series of books
+                        published for everything around maps and navigation. The first volume covers the basics, so you
+                        can map out your current location as well as all areas you have discovered so far. In the second
+                        volume you learn about the advanced techniques which helps in outlining rooms in the dungeon and
+                        you keep track of locked doors which you come across. The third volume aids you locating locked
+                        passages in advance and how to mark certain navigational support on the map. The final chapter
+                        contains ancient blueprint collections of dungeons including the entrance and exit, as well as
+                        secret chambers.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_15_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_15_toggle">Books – Lophian Battle
+                    Strategies</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        Far and near, Lophians are cherished for their tactical thinking. Also, efficient Lophian
+                        warfare is credited as one of the key drivers in the victorious outcome in the Construct Wars.
+                        As long as this book is in your possession, you gain a tactical advantage by striking first in
+                        every battle.
+                    </p>
+                </div>
+            </section>
+            <section class="tutorial_section">
+                <input type="checkbox" class="in_hide" id="tutorial_section_16_toggle">
+                <label class="tutorial_section_label" for="tutorial_section_16_toggle">Books – Maqeeto's Maritime
+                    Chronicles</label>
+                <div class="tutorial_section_content">
+                    <p>
+                        Maqeeto has a long lineage of sailors and thus it was just natural for her
+                        to learn everything about boats and the sea from a young age. However, the current whereabouts
+                        of Maqeeto are unclear and the book is the last thing that gives evidence that Maqeeto is real.
+                        Every copy of this book comes with a ship to instantly apply all the maritime knowledge.
+                    </p>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <p>
+            Copyright &copy; 2020&ndash;2021 Tome Travelers. All Rights Reserved.
+            Inquiries to: <a href="mailto:tome.travelers@pm.me">tome.travelers@pm.me</a>
+        </p>
+    </footer>
+</body>
+
+</html>

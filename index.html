@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tome Travelers</title>
+    <meta charset="utf-8">
+
+    <link rel="shortcut icon" type="image/png" href="favicon.png" sizes="any">
+    <link rel="stylesheet" href="css/tome_travelers.css">
+    <script src="js/game.min.js"></script>
+</head>
+
+<body>
+    <header>Tome Travelers</header>
+    <nav>
+        <a href="index.html" class="button" target="_self" rel="noopener noreferrer">New game</a>
+        <button type="button" class="button" disabled>Settings</button>
+        <a href="tutorial.html" class="button" target="_blank" rel="noopener noreferrer">Tutorial</a>
+        <a href="credits.html" class="button" target="_blank" rel="noopener noreferrer">Credits</a>
+    </nav>
+    <main>
+        <div>
+            <div>
+                <p>
+                    You are one of the infamous tome travelers who crawl through dungeons to discover books and gather
+                    long-lost knowledge.
+                </p>
+            </div>
+            <div>
+                <label for="character_name">Choose your character's name</label>
+                <input id="character_name" type="text" placeholder="" />
+                <span>or pick one of the suggestions:</span>
+                <span id="name_suggestions" onclick="copyName()"></span>
+                <button type="button" onclick="suggestNames();">Offer more name ideas</button>
+            </div>
+            <div>
+                <span>Choose your character's favourite book</span>
+                <select name="books" id="books">
+                    <option value="0" selected>No favourite book</option>
+                    <option value="113">Tarshil's Tome of Traps</option>
+                    <option value="179">Eghara Fragments</option>
+                    <option value="263">Grimoire of Nimboor</option>
+                    <option value="317">Lophian Encyclopedia</option>
+                    <option value="389">Codex of Righea Giants</option>
+                    <option value="421">Gyldae's Scrolls</option>
+                    <option value="853">Mystical Book of Myros</option>
+                    <option value="971">Girshein Compendium</option>
+                </select>
+            </div>
+            <div>
+                <button type="button" onclick="startGame();">Embark on your adventure</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>
+            Copyright &copy; 2020&ndash;2021 Tome Travelers. All Rights Reserved.
+            Inquiries to: <a href="mailto:tome.travelers@pm.me">tome.travelers@pm.me</a>
+        </p>
+    </footer>
+</body>
+
+<script>
+
+    function _getSelectedText() {
+        let text = "";
+        if (window.getSelection) {
+            text = window.getSelection().toString();
+        } else if (document.selection && document.selection.type != "Control") {
+            text = document.selection.createRange().text;
+        }
+        return text;
+    }
+
+    function suggestNames() {
+        let names = [];
+        for (let i = 0; i < 3; i++) {
+            names.push(TT.Names.randomCharacterName());
+        }
+        document.getElementById("name_suggestions").innerHTML = names.join(", ");
+    }
+
+    function copyName() {
+        let selectedText = _getSelectedText();
+        if (selectedText.includes(",")) {
+            selectedText = selectedText.split(",").find(text => text !== "");
+        }
+        if (selectedText && selectedText.trim() !== "") {
+            document.getElementById("character_name").value = selectedText.trim();
+        }
+    }
+
+    function calculateSeed(name) {
+        let seed = 5107;
+
+        const books = document.getElementById("books");
+        seed = parseInt(books[books.selectedIndex].value) + (seed << 6) + (seed << 16) - seed;
+
+        if (name && name.trim() !== "") {
+            for (let i = 0; i < name.length; i++) {
+
+                let code = name.charCodeAt(i);
+                seed = code + (seed << 6) + (seed << 16) - seed;
+
+            };
+        }
+
+        return seed & 479001599;
+    }
+
+    function startGame() {
+        TT.Storage.clearState();
+        let name = document.getElementById("character_name").value;
+        let favouriteBook = parseInt(books[books.selectedIndex].value);
+        if (name !== null && name !== undefined && name.length > 1) {
+            let seed = calculateSeed(name);
+            TT.Storage.initState(name, favouriteBook, seed);
+        }
+        window.location.replace("game.html");
+    }
+
+    function initForm() {
+        suggestNames(); // Prefill name suggestions
+    }
+    initForm();
+</script>
+
+</html>

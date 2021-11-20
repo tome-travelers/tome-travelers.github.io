@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tome Travelers</title>
+    <meta charset="utf-8">
+
+    <link rel="shortcut icon" type="image/png" href="favicon.png" sizes="any">
+    <link rel="stylesheet" href="css/tome_travelers.css">
+    <script src="js/game.min.js"></script>
+</head>
+
+<body class="no_overflow_body">
+    <header>Tome Travelers</header>
+    <nav>
+        <a href="index.html" class="button" target="_self" rel="noopener noreferrer">New game</a>
+        <button type="button" class="button" onclick="TT.UI.toggleSettings()">Settings</button>
+        <a href="tutorial.html" class="button" target="_blank" rel="noopener noreferrer">Tutorial</a>
+        <a href="credits.html" class="button" target="_blank" rel="noopener noreferrer">Credits</a>
+    </nav>
+    <main>
+        <div id="gamescreen" onmousemove="TT.UI.handleIdleMousePointer();">
+            <div id="loading_indicator_container">
+                <label id="loading_label" for="loading_indicator">Loading …</label>
+                <progress id="loading_indicator" max="100" value="0"></progress>
+            </div>
+
+            <canvas id="canvas" width="1920" height="1080"></canvas>
+
+            <div id="prompt_question_element">
+                <div id="prompt_question_title"></div>
+                <div id="prompt_question_body"></div>
+                <div id="prompt_question_buttons">
+                    <button id="prompt_question_negative" onclick="TT.UI.promptNegativeAnswer();"></button>
+                    <button id="prompt_question_positive" onclick="TT.UI.promptPositiveAnswer();"></button>
+                </div>
+            </div>
+
+            <div id="reward_element">
+                <div id="reward_title"></div>
+                <div id="reward_body"></div>
+                <div id="reward_buttons">
+                    <button type="button" onclick="TT.UI.hideRewardPopUp();">Okay</button>
+                </div>
+            </div>
+
+            <div id="settings_element">
+                <div id="settings_title">Settings</div>
+                <div id="settings_panel"></div>
+                <div id="settings_buttons">
+                    <button type="button" onclick="TT.UI.saveSettings()">Save</button>
+                </div>
+            </div>
+
+            <div id="reward_feed"></div>
+            <div id="battle_log"></div>
+
+            <div id="town_element">
+                <div id="town_title"></div>
+                <div id="town_panel"></div>
+            </div>
+
+            <div id="inventory_element">
+                <input id="radio_items" name="tab_group" type="radio" checked>
+                <input id="radio_diary" name="tab_group" type="radio">
+                <input id="radio_battle" name="tab_group" type="radio">
+                <input id="radio_log" name="tab_group" type="radio">
+                <input id="radio_quests" name="tab_group" type="radio">
+                <input id="radio_bestiary" name="tab_group" type="radio">
+                <div class="inventory_tabs">
+                    <label class="inventory_tab" id="tab_selector_items" for="radio_items">
+                        <div class="inventory_tab_header">
+                            <span class="inventory_tab_header_icon icon_inventory"></span>
+                            <span>Items</span>
+                        </div>
+                    </label>
+                    <label class="inventory_tab" id="tab_selector_quests" for="radio_quests">
+                        <div class="inventory_tab_header">
+                            <span class="inventory_tab_header_icon icon_quests"></span>
+                            <span>Quests</span>
+                        </div>
+                    </label>
+                    <label class="inventory_tab" id="tab_selector_diary" for="radio_diary">
+                        <div class="inventory_tab_header">
+                            <span class="inventory_tab_header_icon icon_diary"></span>
+                            <span>Diary</span>
+                        </div>
+                    </label>
+                    <label class="inventory_tab" id="tab_selector_battle" for="radio_battle">
+                        <div class="inventory_tab_header">
+                            <span class="inventory_tab_header_icon icon_battle"></span>
+                            <span>Battle</span>
+                        </div>
+                    </label>
+                    <label class="inventory_tab" id="tab_selector_bestiary" for="radio_bestiary">
+                        <div class="inventory_tab_header">
+                            <span class="inventory_tab_header_icon icon_bestiary"></span>
+                            <span>Bestiary</span>
+                        </div>
+                    </label>
+                    <label class="inventory_tab" id="tab_selector_log" for="radio_log">
+                        <div class="inventory_tab_header">
+                            <span class="inventory_tab_header_icon icon_log"></span>
+                            <span>Log</span>
+                        </div>
+                    </label>
+                </div>
+                <div>
+                    <div id="inventory_panel_items" class="inventory_panel"></div>
+                    <div id="inventory_panel_quests" class="inventory_panel"></div>
+                    <div id="inventory_panel_diary" class="inventory_panel"></div>
+                    <div id="inventory_panel_battle" class="inventory_panel"></div>
+                    <div id="inventory_panel_bestiary" class="inventory_panel"></div>
+                    <div id="inventory_panel_log" class="inventory_panel"></div>
+                </div>
+            </div>
+
+            <div id="game_over_element">
+                <div>
+                    <div>
+                        <h2 class="game_over_title">Game over!</h2>
+                        <p>That last one really hurt my feelings!</p>
+                    </div>
+                    <div>
+                        <a href="index.html" class="button" target="_self" rel="noopener noreferrer">Start a new
+                            game</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="thought_bubble_element">
+                <p id="thought"></p>
+            </div>
+
+            <div id="world_id_indicator" title="Your world ID"></div>
+            <div id="fullscreen_mode_icon" onclick="TT.UI.toggleFullscreen();" title="Toggle fullscreen mode"></div>
+            <div id="music_toggle_icon" data-content="&#x1F50A;" onclick="TT.UI.toggleMusic();" title="Toggle music"></div>
+        </div>
+    </main>
+    <footer>
+        <p>
+            Copyright &copy; 2020&ndash;2021 Tome Travelers. All Rights Reserved.
+            Inquiries to: <a href="mailto:tome.travelers@pm.me">tome.travelers@pm.me</a>
+        </p>
+    </footer>
+</body>
+
+<script>
+    TT.Game.start();
+</script>
+
+</html>
