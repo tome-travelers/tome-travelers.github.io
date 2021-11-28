@@ -62,6 +62,7 @@
 
 <script>
 
+
     function _getSelectedText() {
         let text = "";
         if (window.getSelection) {
@@ -112,10 +113,11 @@
         TT.Storage.clearState();
         let name = document.getElementById("character_name").value;
         let favouriteBook = parseInt(books[books.selectedIndex].value);
-        if (name !== null && name !== undefined && name.length > 1) {
-            let seed = calculateSeed(name);
-            TT.Storage.initState(name, favouriteBook, seed);
+        if (name === null || name === undefined || name.length < 1) {
+            name = TT.Names.randomCharacterName();
         }
+        let seed = calculateSeed(name);
+        TT.Storage.initState(name, favouriteBook, seed);
         window.location.replace("game.html");
     }
 
